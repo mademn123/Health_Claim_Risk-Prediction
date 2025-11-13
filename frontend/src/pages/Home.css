@@ -1,0 +1,68 @@
+/* ensures that background fits to screen */
+
+.home-container {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: url('../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.home-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-radius: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 1rem;     /* increased vertical padding, reduced horizontal */
+  max-width: 480px;         /* reduced width to make content narrower */
+  width: 90%;              /* ensure responsive on mobile */
+  color: #35A4D4;
+}
+
+.home-title {
+  font-size: 2.5rem;
+  color: #35a4d4;
+  font-weight: 700;
+  margin-bottom: 2rem;      /* increased bottom margin */
+  line-height: 1.2;        /* tighter line height for title */
+  margin-top: 0rem;
+}
+
+.home-text {
+  font-size: 1.1rem;
+  line-height: 1.8;        /* increased line height for better readability */
+  margin-bottom: 2rem;      /* increased spacing between text blocks */
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.home-button {
+  background-color: #35a4d4;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+}
+
+.home-button:hover {
+  background-color: #2a90bf;
+  transform: scale(1.05);
+}

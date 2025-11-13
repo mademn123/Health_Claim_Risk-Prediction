@@ -1,0 +1,75 @@
+.login-container {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: url('../assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Reuse existing form styles but with login- prefix */
+.login-title {
+  color: #35a4d4;
+  font-size: 2.8rem;
+  margin-bottom: 3rem;
+  line-height: 1.1;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Keep your existing form handling but wrap it in the new UI */
+.login-form {
+  width: 100%;
+}
+
+.login-form input {
+  color: #000000;
+}
+
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background: #35a4d4;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: background-color 0.2s;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.signup-link a {
+  color: #35a4d4;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 0.25rem;
+}

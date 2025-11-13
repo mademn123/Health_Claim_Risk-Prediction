@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { signupForm, signinForm } from "../firebaseAuth";
+import "./Login.css";
 
-function Login() {
+export default function Login() {
   const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,50 +15,42 @@ function Login() {
     if (isRegistering) {
       await signupForm(email, password);
     } else {
-      await signinForm(email, password);
+      try {
+        await signinForm(email, password);
+        navigate("/landing_page");
+      } catch (error) {
+        console.error("Sign-in error:", error);
+      }
     }
 
-    e.target.reset(); // optional: clears the form after submit
+    e.target.reset();
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>{isRegistering ? "Sign Up" : "Login"}</h2>
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">Welcome Back</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="Email" required />
-        <br />
-        <br />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-        />
-        <br />
-        <br />
-        <button type="submit">
-          {isRegistering ? "Create Account" : "Login"}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label>Email Address:</label>
+            <input type="email" name="email" required />
+          </div>
 
-      <p style={{ marginTop: "20px" }}>
-        {isRegistering ? "Already have an account?" : "Don’t have an account?"}{" "}
-        <button
-          type="button"
-          onClick={() => setIsRegistering(!isRegistering)}
-          style={{
-            background: "none",
-            color: "blue",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          {isRegistering ? "Login" : "Sign Up"}
-        </button>
-      </p>
+          <div className="form-group">
+            <label>Password:</label>
+            <input type="password" name="password" required />
+          </div>
+
+          <button type="submit" className="login-button">
+            Log In
+          </button>
+
+          <div className="signup-link">
+            Don't Have An Account? <Link to="/signup">Sign Up Now</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
-
-export default Login;
