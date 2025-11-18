@@ -6,19 +6,45 @@ import LandingPage from "./pages/LandingPage";
 import Survey from "./pages/Survey";
 import Results from "./pages/Results";
 import "./App.css";
+import { AuthProvider } from "./AuthContext.jsx";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/landing_page" element={<LandingPage />} />
-        <Route path="/survey" element={<Survey />} />
-        <Route path="/results" element={<Results />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/landing_page"
+            element={
+              <ProtectedRoute>
+                <LandingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/survey"
+            element={
+              <ProtectedRoute>
+                <Survey />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/results"
+            element={
+              <ProtectedRoute>
+                <Results />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

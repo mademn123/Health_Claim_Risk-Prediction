@@ -1,5 +1,3 @@
-/* ensures that background fits to screen */
-
 .home-container {
   position: fixed; 
   top: 0;
@@ -18,6 +16,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-top: 40px;
 }
 
 .home-card {
@@ -25,9 +24,9 @@
   backdrop-filter: blur(6px);
   border-radius: 30px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  padding: 2.5rem 1rem;     /* increased vertical padding, reduced horizontal */
-  max-width: 480px;         /* reduced width to make content narrower */
-  width: 90%;              /* ensure responsive on mobile */
+  padding: 2.5rem 1rem;    
+  max-width: 480px;         
+  width: 90%;             
   color: #35A4D4;
 }
 
@@ -35,15 +34,15 @@
   font-size: 2.5rem;
   color: #35a4d4;
   font-weight: 700;
-  margin-bottom: 2rem;      /* increased bottom margin */
-  line-height: 1.2;        /* tighter line height for title */
+  margin-bottom: 2rem;      
+  line-height: 1.2;        
   margin-top: 0rem;
 }
 
 .home-text {
   font-size: 1.1rem;
-  line-height: 1.8;        /* increased line height for better readability */
-  margin-bottom: 2rem;      /* increased spacing between text blocks */
+  line-height: 1.8;       
+  margin-bottom: 2rem;      
 }
 
 .bold {

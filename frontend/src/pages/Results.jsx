@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Results.css";
+import Navbar from "../components/Navbar";
 
+// Map smoking input to MEPS coding
 const smokeToMEPS = (v) => {
   const s = String(v ?? "").toLowerCase();
   return ["yes", "current", "1", "true", "y"].includes(s) ? 1 : 2;
 };
-
+// Map survey input to model features
 const mapSurveyToFeatures = (s = {}) => {
   const arr = Array.isArray(s.chronic) ? s.chronic : [];
   const has = (name, ...alts) =>
@@ -14,7 +16,7 @@ const mapSurveyToFeatures = (s = {}) => {
       const y = String(x || "").toLowerCase();
       return [name, ...alts].some((n) => y === String(n).toLowerCase());
     });
-
+  // return mapped features
   return {
     ...s,
     AGE23X: Number(s.age) || 40,
@@ -42,7 +44,7 @@ export default function Results({ surveyData }) {
   });
 
   const buildServerPayload = (f) => {
-    // Prefer survey strings if present; fall back to coded fields
+    // builds survey payload based on the user inputs using the created mapping
     const sex =
       f.sex || (f.SEX === 1 ? "male" : f.SEX === 2 ? "female" : "male");
     const region =
@@ -77,7 +79,6 @@ export default function Results({ surveyData }) {
     if (Number(f.CHDDX) === 1) chronic.push("Heart Disease");
     if (Number(f.DIABDX_M18) === 1) chronic.push("Diabetes");
 
-    // Always derive smoke from toggle value
     const smoke = Number(f.ADSMOK42) === 1 ? "yes" : "no";
 
     return {
@@ -92,7 +93,7 @@ export default function Results({ surveyData }) {
       smoke,
     };
   };
-
+  // Fetch prediction from server
   const fetchPrediction = useCallback(
     async (updated = features) => {
       try {
@@ -117,17 +118,16 @@ export default function Results({ surveyData }) {
     [features]
   );
 
-  // Reinitialize toggles from the latest survey submission
+  // reinitialize toggles from the latest survey submission
   useEffect(() => {
     const initial = mapSurveyToFeatures(navSurvey);
     setFeatures(initial);
     fetchPrediction(initial);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state?.userInput, surveyData]);
 
   const handleToggle = (key, value) => {
     const updated = { ...features, [key]: value };
-    if (updated.hasOwnProperty("smoke")) delete updated.smoke; // ensure toggle drives smoke
+    if (updated.hasOwnProperty("smoke")) delete updated.smoke;
     setFeatures(updated);
     fetchPrediction(updated);
   };
@@ -148,101 +148,106 @@ export default function Results({ surveyData }) {
   };
 
   return (
-    <div className="page">
-      <div className="wrapper">
-        <div className="title">Results</div>
+    <>
+      <Navbar />
+      <div className="results-container">
+        <div className="page">
+          <div className="wrapper">
+            <div className="title">Results</div>
 
-        <div className="card">
-          <div className="title">Estimated Annual Cost:</div>
-          <div className="value">
-            {cost !== null ? nf.format(cost) : "Loading..."}
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="title">Probability of Needing a Health Claim</div>
-          <div className="value">
-            {probability !== null
-              ? `${Math.round(probability * 100)}%`
-              : "Loading..."}
-          </div>
-        </div>
-
-        <div className="large-card">
-          <div className="what-if-title">What if?</div>
-          <div className="what-if-subtitle">
-            Adjust age or toggle conditions to see updates.
-          </div>
-
-          <div style={{ textAlign: "center", marginBottom: 12 }}>
-            <label style={{ fontWeight: 700, color: "#1086c8" }}>
-              Age: {features.AGE23X}
-            </label>
-            <div style={{ marginTop: 8 }}>
-              <input
-                type="range"
-                min="18"
-                max="90"
-                value={features.AGE23X}
-                onChange={handleAgeChange}
-                style={{ width: "80%" }}
-              />
+            <div className="card">
+              <div className="title">Estimated Annual Cost:</div>
+              <div className="value">
+                {cost !== null ? nf.format(cost) : "Loading..."}
+              </div>
             </div>
-          </div>
 
-          <div className="controls">
-            <label className="control">
-              <input
-                type="checkbox"
-                onChange={handleSmoking}
-                checked={Number(features.ADSMOK42) === 1}
-              />{" "}
-              Currently smoking
-            </label>
-            <label className="control">
-              <input
-                type="checkbox"
-                onChange={handleHBP}
-                checked={Number(features.HIBPDX) === 1}
-              />{" "}
-              High blood pressure
-            </label>
-            <label className="control">
-              <input
-                type="checkbox"
-                onChange={handleDiabetes}
-                checked={Number(features.DIABDX_M18) === 1}
-              />{" "}
-              Diabetes
-            </label>
-            <label className="control">
-              <input
-                type="checkbox"
-                onChange={handleAsthma}
-                checked={Number(features.ASTHDX) === 1}
-              />{" "}
-              Asthma
-            </label>
-            <label className="control">
-              <input
-                type="checkbox"
-                onChange={handleCancer}
-                checked={Number(features.CANCERDX) === 1}
-              />{" "}
-              Cancer
-            </label>
-          </div>
+            <div className="card">
+              <div className="title">Probability of Needing a Health Claim</div>
+              <div className="value">
+                {probability !== null
+                  ? `${Math.round(probability * 100)}%`
+                  : "Loading..."}
+              </div>
+            </div>
 
-          <div style={{ textAlign: "center", marginTop: 18 }}>
-            <button
-              onClick={() => navigate("/survey")}
-              className="new-estimate-button"
-            >
-              Retake survey
-            </button>
+            <div className="large-card">
+              <div className="what-if-title">What if?</div>
+              <div className="what-if-subtitle">
+                Adjust age or toggle conditions to see updates.
+              </div>
+
+              <div style={{ textAlign: "center", marginBottom: 12 }}>
+                <label style={{ fontWeight: 700, color: "#1086c8" }}>
+                  Age: {features.AGE23X}
+                </label>
+                <div style={{ marginTop: 8 }}>
+                  <input
+                    type="range"
+                    min="18"
+                    max="90"
+                    value={features.AGE23X}
+                    onChange={handleAgeChange}
+                    style={{ width: "80%" }}
+                  />
+                </div>
+              </div>
+
+              <div className="controls">
+                <label className="control">
+                  <input
+                    type="checkbox"
+                    onChange={handleSmoking}
+                    checked={Number(features.ADSMOK42) === 1}
+                  />{" "}
+                  Currently smoking
+                </label>
+                <label className="control">
+                  <input
+                    type="checkbox"
+                    onChange={handleHBP}
+                    checked={Number(features.HIBPDX) === 1}
+                  />{" "}
+                  High blood pressure
+                </label>
+                <label className="control">
+                  <input
+                    type="checkbox"
+                    onChange={handleDiabetes}
+                    checked={Number(features.DIABDX_M18) === 1}
+                  />{" "}
+                  Diabetes
+                </label>
+                <label className="control">
+                  <input
+                    type="checkbox"
+                    onChange={handleAsthma}
+                    checked={Number(features.ASTHDX) === 1}
+                  />{" "}
+                  Asthma
+                </label>
+                <label className="control">
+                  <input
+                    type="checkbox"
+                    onChange={handleCancer}
+                    checked={Number(features.CANCERDX) === 1}
+                  />{" "}
+                  Cancer
+                </label>
+              </div>
+
+              <div style={{ textAlign: "center", marginTop: 18 }}>
+                <button
+                  onClick={() => navigate("/survey")}
+                  className="new-estimate-button"
+                >
+                  Retake survey
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
