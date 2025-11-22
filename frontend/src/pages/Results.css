@@ -1,3 +1,7 @@
+.results-container {
+  padding-top: 40px;
+}
+
 .page {
   min-height: 100vh;
   padding: 24px;
@@ -6,6 +10,7 @@
   justify-content: center;
   align-items: flex-start;
   font-family: Inter, Roboto, Arial, sans-serif;
+  border-radius: 30px;  
 }
 
 .wrapper {

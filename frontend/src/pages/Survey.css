@@ -6,6 +6,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
+  padding-top: 40px;
 }
 
 .survey-container {
@@ -25,7 +26,6 @@ body {
   font-weight: 600;
 }
 
-/* For all option groups (horizontal default) */
 .survey-container .option-group {
   display: flex;
   align-items: center;
@@ -34,7 +34,6 @@ body {
   gap: 20px;
 }
 
-/* For vertically stacked options */
 .survey-container .option-group.vertical {
   display: flex;
   flex-direction: column;
